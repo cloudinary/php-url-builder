@@ -39,8 +39,6 @@ abstract class UnitTestCase extends CloudinaryAssetTestCase
 
         $this->cldUrlEnvBackup = getenv(Configuration::CLOUDINARY_URL_ENV_VAR);
 
-        self::assertNotEmpty($this->cldUrlEnvBackup, 'Please set up CLOUDINARY_URL before running tests!');
-
         $this->cloudinaryUrl = 'cloudinary://' . $this::API_KEY . ':' . $this::API_SECRET . '@' . $this::CLOUD_NAME;
 
         putenv(Configuration::CLOUDINARY_URL_ENV_VAR . '=' . $this->cloudinaryUrl);
