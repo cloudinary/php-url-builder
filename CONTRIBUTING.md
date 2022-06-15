@@ -23,7 +23,7 @@ Please be aware that the library is used in a wide variety of environments and t
 - Ensure the PR description clearly describes the bug / feature. Include relevant issue number if applicable.
 - Provide test code that covers the new code
 - The code should support:
-  - PHP >= 5.6
+  - PHP >= 8.0
 
 ## Code contribution
 
