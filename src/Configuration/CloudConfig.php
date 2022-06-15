@@ -40,7 +40,7 @@ class CloudConfig extends BaseConfigSection
     /**
      * @var array of configuration keys that contain sensitive data that should not be exported (for example api key)
      */
-    protected static $sensitiveDataKeys = [self::API_KEY, self::API_SECRET, self::OAUTH_TOKEN];
+    protected static array $sensitiveDataKeys = [self::API_KEY, self::API_SECRET, self::OAUTH_TOKEN];
 
     /**
      * Mandatory. The name of your Cloudinary cloud. Used to build the public URL for all your media assets.
@@ -100,7 +100,7 @@ class CloudConfig extends BaseConfigSection
      *
      * @internal
      */
-    public function setCloudConfig($configKey, $configValue)
+    public function setCloudConfig(string $configKey, mixed $configValue): static
     {
         return $this->setConfig($configKey, $configValue);
     }

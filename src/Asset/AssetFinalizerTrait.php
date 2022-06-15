@@ -16,7 +16,6 @@ use Cloudinary\StringUtils;
 use Cloudinary\Utils;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
-use UnexpectedValueException;
 
 /**
  * Trait AssetFinalizerTrait
@@ -40,13 +39,13 @@ trait AssetFinalizerTrait
      *      If cdn_domain is true uses a[1-5].cname for http.
      *      For https, uses the same naming scheme as 1 for shared distribution and as 2 for private distribution.
      *
-     * @return mixed
+     * @return string
      */
-    protected function finalizeDistribution()
+    protected function finalizeDistribution(): string
     {
         $protocol = UrlConfig::PROTOCOL_HTTPS;
 
-        if (!empty($this->urlConfig->domain)) {
+        if (! empty($this->urlConfig->domain)) {
             return "$protocol://{$this->urlConfig->domain}";
         }
 
@@ -56,9 +55,9 @@ trait AssetFinalizerTrait
     /**
      * Finalizes asset source.
      *
-     * @return mixed
+     * @return string
      */
-    protected function finalizeSource()
+    protected function finalizeSource(): string
     {
         $source = $this->asset->publicId(true);
 
@@ -78,9 +77,9 @@ trait AssetFinalizerTrait
     /**
      * Finalizes version part of the asset URL.
      *
-     * @return mixed
+     * @return string|null
      */
-    protected function finalizeVersion()
+    protected function finalizeVersion(): ?string
     {
         $version = $this->asset->version;
 
@@ -100,15 +99,15 @@ trait AssetFinalizerTrait
      *
      * @see https://cloudinary.com/documentation/advanced_url_delivery_options#generating_delivery_url_signatures
      *
-     * @return mixed
+     * @return string
      */
-    protected function finalizeSimpleSignature()
+    protected function finalizeSimpleSignature(): string
     {
         if (! $this->urlConfig->signUrl || $this->authToken->isEnabled()) {
             return '';
         }
 
-        $toSign    = $this->asset->publicId();
+        $toSign = $this->asset->publicId();
         $signature = StringUtils::base64UrlEncode(
             Utils::sign(
                 $toSign,
@@ -129,7 +128,7 @@ trait AssetFinalizerTrait
      *
      * @return string
      */
-    protected function getSignatureAlgorithm()
+    protected function getSignatureAlgorithm(): string
     {
         if ($this->urlConfig->longUrlSignature) {
             return Utils::ALGO_SHA256;
@@ -147,9 +146,9 @@ trait AssetFinalizerTrait
      *
      * @param string $urlStr The URL to finalize.
      *
-     * @return string|UriInterface The resulting URL.
+     * @return UriInterface The resulting URL.
      */
-    protected function finalizeUrl($urlStr)
+    protected function finalizeUrl(string $urlStr): UriInterface
     {
         $urlParts = parse_url($urlStr);
 
@@ -166,7 +165,7 @@ trait AssetFinalizerTrait
      *
      * @return array resulting URL parts
      */
-    protected function finalizeUrlWithAuthToken($urlParts)
+    protected function finalizeUrlWithAuthToken(array $urlParts): array
     {
         if (! $this->urlConfig->signUrl || ! $this->authToken->isEnabled()) {
             return $urlParts;
@@ -192,7 +191,7 @@ trait AssetFinalizerTrait
      *
      * @return array resulting URL
      */
-    protected function finalizeUrlWithAnalytics($urlParts)
+    protected function finalizeUrlWithAnalytics(array $urlParts): array
     {
         if (! $this->urlConfig->analytics) {
             return $urlParts;

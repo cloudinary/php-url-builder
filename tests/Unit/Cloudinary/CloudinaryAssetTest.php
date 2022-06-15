@@ -24,7 +24,7 @@ class CloudinaryAssetTest extends AssetTestCase
      */
     private $c;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

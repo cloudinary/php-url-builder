@@ -27,37 +27,37 @@ use Monolog\Logger as Monolog;
  */
 class Logger
 {
-    const LOGGER_NAME = 'cloudinary';
+    public const LOGGER_NAME = 'cloudinary';
 
     /**
      * @var Monolog $entity
      */
-    private $entity;
+    private Monolog $entity;
 
     /**
-     * @var int $defaultLogLevel The default log level. Is set during initialization.
+     * @var ?int $defaultLogLevel The default log level. Is set during initialization.
      */
-    private $defaultLogLevel;
+    private ?int $defaultLogLevel = null;
 
     /**
      * @var array Map of PHP error levels to PSR-3 log levels
      */
-    private $errorLevelMap = [
-        E_ERROR => Monolog::CRITICAL,
-        E_WARNING => Monolog::WARNING,
-        E_PARSE => Monolog::ALERT,
-        E_NOTICE => Monolog::NOTICE,
-        E_CORE_ERROR => Monolog::CRITICAL,
-        E_CORE_WARNING => Monolog::WARNING,
-        E_COMPILE_ERROR => Monolog::ALERT,
-        E_COMPILE_WARNING => Monolog::WARNING,
-        E_USER_ERROR => Monolog::ERROR,
-        E_USER_WARNING => Monolog::WARNING,
-        E_USER_NOTICE => Monolog::NOTICE,
-        E_STRICT => Monolog::NOTICE,
+    private array $errorLevelMap = [
+        E_ERROR             => Monolog::CRITICAL,
+        E_WARNING           => Monolog::WARNING,
+        E_PARSE             => Monolog::ALERT,
+        E_NOTICE            => Monolog::NOTICE,
+        E_CORE_ERROR        => Monolog::CRITICAL,
+        E_CORE_WARNING      => Monolog::WARNING,
+        E_COMPILE_ERROR     => Monolog::ALERT,
+        E_COMPILE_WARNING   => Monolog::WARNING,
+        E_USER_ERROR        => Monolog::ERROR,
+        E_USER_WARNING      => Monolog::WARNING,
+        E_USER_NOTICE       => Monolog::NOTICE,
+        E_STRICT            => Monolog::NOTICE,
         E_RECOVERABLE_ERROR => Monolog::ERROR,
-        E_DEPRECATED => Monolog::NOTICE,
-        E_USER_DEPRECATED => Monolog::NOTICE,
+        E_DEPRECATED        => Monolog::NOTICE,
+        E_USER_DEPRECATED   => Monolog::NOTICE,
     ];
 
     /**
@@ -74,12 +74,12 @@ class Logger
     /**
      * @param LoggingConfig $config
      *
-     * @return null|Logger
+     * @return void
      */
-    private function init(LoggingConfig $config)
+    private function init(LoggingConfig $config): void
     {
         if ($config->enabled === false) {
-            return null;
+            return;
         }
 
         try {
@@ -124,34 +124,32 @@ class Logger
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
 
-            return null;
+            return;
         }
-
-        return $this;
     }
 
     /**
      * @param HandlerInterface $handler
      *
-     * @return Monolog
+     * @return void
      */
-    private function addHandler(HandlerInterface $handler)
+    private function addHandler(HandlerInterface $handler): void
     {
         foreach ($this->entity->getHandlers() as $entityHandler) {
             if ($entityHandler instanceof HandlerInterface
                 && $entityHandler->getLevel() === $handler->getLevel()
             ) {
-                return $this->entity;
+                return;
             }
         }
 
-        return $this->entity->pushHandler($handler);
+        $this->entity->pushHandler($handler);
     }
 
     /**
      * @return HandlerInterface[]
      */
-    public function getHandlers()
+    public function getHandlers(): array
     {
         return $this->entity->getHandlers();
     }
@@ -161,7 +159,7 @@ class Logger
      *
      * @return null|TestHandler
      */
-    public function getTestHandler()
+    public function getTestHandler(): ?TestHandler
     {
         foreach ($this->entity->getHandlers() as $handler) {
             if ($handler instanceof TestHandler) {
@@ -179,7 +177,7 @@ class Logger
      *
      * @return void
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         $this->entity->log($level, $message, $context);
     }
@@ -191,7 +189,7 @@ class Logger
      *
      * @return int PSR-3 log level
      */
-    public function getDefaultLogLevel()
+    public function getDefaultLogLevel(): int
     {
         if ($this->defaultLogLevel !== null) {
             return $this->defaultLogLevel;

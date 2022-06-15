@@ -22,36 +22,36 @@ interface AssetInterface extends JsonSerializable
      *
      * @param string $string The asset string (URL).
      *
-     * @return mixed
+     * @return static
      */
-    public static function fromString($string);
+    public static function fromString(string $string): static;
 
     /**
      * Creates a new asset from the provided JSON.
      *
-     * @param string|array $json The asset json. Can be an array or a JSON string.
+     * @param array|string $json The asset json. Can be an array or a JSON string.
      *
-     * @return mixed
+     * @return static
      */
-    public static function fromJson($json);
+    public static function fromJson(array|string $json): static;
 
     /**
      * Imports data from the provided string (URL).
      *
      * @param string $string The asset string (URL).
      *
-     * @return mixed
+     * @return static
      */
-    public function importString($string);
+    public function importString(string $string): static;
 
     /**
      * Imports data from the provided JSON.
      *
-     * @param string|array $json The asset json. Can be an array or a JSON string.
+     * @param array|string $json The asset json. Can be an array or a JSON string.
      *
-     * @return mixed
+     * @return static
      */
-    public function importJson($json);
+    public function importJson(array|string $json): static;
 
     /**
      * Serializes to string.
@@ -66,5 +66,5 @@ interface AssetInterface extends JsonSerializable
      * @return mixed
      */
     #[\ReturnTypeWillChange]
-    public function jsonSerialize();
+    public function jsonSerialize(): mixed;
 }

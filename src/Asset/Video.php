@@ -27,7 +27,7 @@ class Video extends BaseMediaAsset implements VideoTransformationInterface
      *
      * @return VideoTransformation
      */
-    public function getTransformation()
+    public function getTransformation(): VideoTransformation
     {
         if (! isset($this->transformation)) {
             $this->transformation = new VideoTransformation();

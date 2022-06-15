@@ -38,7 +38,7 @@ abstract class BaseMediaAsset extends BaseAsset implements CommonTransformationI
     /**
      * BaseMediaAsset constructor.
      *
-     * @param      $source
+     * @param                                 $source
      * @param Configuration|string|array|null $configuration The Configuration source.
      */
     public function __construct($source, $configuration = null)
@@ -129,13 +129,17 @@ abstract class BaseMediaAsset extends BaseAsset implements CommonTransformationI
     /**
      * Internal pre-serialization helper.
      *
-     * @param CommonTransformation|string $withTransformation Optional transformation that can be appended/used instead.
-     * @param bool                        $append             Whether to append or use the provided transformation.
+     * @param string|CommonTransformation|null $withTransformation Optional transformation that can be appended/used
+     *                                                             instead.
+     * @param bool                             $append             Whether to append or use the provided
+     *                                                             transformation.
      *
      * @return array
      */
-    protected function prepareUrlParts($withTransformation = null, $append = true)
-    {
+    protected function prepareUrlParts(
+        CommonTransformation|string $withTransformation = null,
+        bool $append = true
+    ): array {
         $urlParts = parent::prepareUrlParts();
         $urlParts = ArrayUtils::insertAt(
             $urlParts,
@@ -153,12 +157,14 @@ abstract class BaseMediaAsset extends BaseAsset implements CommonTransformationI
     /**
      * Serializes to the URL string.
      *
-     * @param CommonTransformation|string $withTransformation Optional transformation that can be appended/used instead.
-     * @param bool                        $append             Whether to append or use the provided transformation.
+     * @param string|CommonTransformation|null $withTransformation Optional transformation that can be appended/used
+     *                                                             instead.
+     * @param bool                             $append             Whether to append or use the provided
+     *                                                             transformation.
      *
      * @return string|UriInterface
      */
-    public function toUrl($withTransformation = null, $append = true)
+    public function toUrl(CommonTransformation|string $withTransformation = null, bool $append = true): string
     {
         return $this->finalizeUrl(
             ArrayUtils::implodeUrl($this->prepareUrlParts($withTransformation, $append))

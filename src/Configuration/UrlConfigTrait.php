@@ -28,7 +28,7 @@ trait UrlConfigTrait
      * @see https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames
      *
      */
-    public function domain($domain)
+    public function domain(string $domain): static
     {
         return $this->setUrlConfig(UrlConfig::DOMAIN, $domain);
     }
@@ -43,7 +43,7 @@ trait UrlConfigTrait
      * @see https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames
      *
      */
-    public function sharedDomain($sharedDomain)
+    public function sharedDomain(string $sharedDomain): static
     {
         return $this->setUrlConfig(UrlConfig::SHARED_DOMAIN, $sharedDomain);
     }
@@ -51,11 +51,11 @@ trait UrlConfigTrait
     /**
      * Set to true to create a signed Cloudinary URL.
      *
-     * @param bool $signUrl
+     * @param bool|null $signUrl
      *
      * @return $this
      */
-    public function signUrl($signUrl = true)
+    public function signUrl(?bool $signUrl = true): static
     {
         return $this->setUrlConfig(UrlConfig::SIGN_URL, $signUrl);
     }
@@ -69,7 +69,7 @@ trait UrlConfigTrait
      *
      * @see https://cloudinary.com/documentation/advanced_url_delivery_options#generating_delivery_url_signatures
      */
-    public function longUrlSignature($longUrlSignature = true)
+    public function longUrlSignature(?bool $longUrlSignature = true): static
     {
         return $this->setUrlConfig(UrlConfig::LONG_URL_SIGNATURE, $longUrlSignature);
     }
@@ -81,7 +81,7 @@ trait UrlConfigTrait
      *
      * @return $this
      */
-    public function forceVersion($forceVersion = true)
+    public function forceVersion(?bool $forceVersion = true): static
     {
         return $this->setUrlConfig(UrlConfig::FORCE_VERSION, $forceVersion);
     }
@@ -93,7 +93,7 @@ trait UrlConfigTrait
      *
      * @return $this
      */
-    public function analytics($analytics = true)
+    public function analytics(?bool $analytics = true): static
     {
         return $this->setUrlConfig(UrlConfig::ANALYTICS, $analytics);
     }
@@ -108,5 +108,5 @@ trait UrlConfigTrait
      *
      * @internal
      */
-    abstract public function setUrlConfig($configKey, $configValue);
+    abstract public function setUrlConfig(string $configKey, mixed $configValue): static;
 }

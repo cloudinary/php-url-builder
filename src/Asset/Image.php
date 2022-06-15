@@ -27,9 +27,9 @@ class Image extends BaseMediaAsset implements ImageTransformationInterface
     /**
      * Gets the transformation.
      *
-     * @return CommonTransformation
+     * @return ImageTransformation|CommonTransformation
      */
-    public function getTransformation()
+    public function getTransformation(): ImageTransformation|CommonTransformation
     {
         if (! isset($this->transformation)) {
             $this->transformation = new ImageTransformation();

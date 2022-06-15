@@ -25,7 +25,7 @@ final class MediaTest extends AssetTestCase
      */
     protected $media;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

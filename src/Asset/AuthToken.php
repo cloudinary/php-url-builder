@@ -30,17 +30,17 @@ use UnexpectedValueException;
  */
 class AuthToken
 {
-    const UNSAFE = '/([ "#%&\'\/:;<=>?@\[\]^`{\|}~\\\])/';
+    protected const UNSAFE = '/([ "#%&\'\/:;<=>?@\[\]^`{|}~\\\])/';
 
-    const AUTH_TOKEN_NAME       = '__cld_token__';
-    const TOKEN_SEPARATOR       = '~';
-    const TOKEN_INNER_SEPARATOR = '=';
-    const TOKEN_ACL_SEPARATOR   = '!';
+    protected const AUTH_TOKEN_NAME       = '__cld_token__';
+    protected const TOKEN_SEPARATOR       = '~';
+    protected const TOKEN_INNER_SEPARATOR = '=';
+    protected const TOKEN_ACL_SEPARATOR   = '!';
 
     /**
      * @var AuthTokenConfig $config The configuration of the authentication token.
      */
-    public $config;
+    public AuthTokenConfig $config;
 
     /**
      * AuthToken constructor.
@@ -117,19 +117,19 @@ class AuthToken
      *      string acl - the ACL for the token.
      *      string url - the URL to authentication in case of a URL token.
      *
-     * @param null|string $path url path to sign. Ignored if acl is set.
+     * @param string|null $path url path to sign. Ignored if acl is set.
      *
      * @return string The authorization token.
      *
      * @throws UnexpectedValueException if neither expiration nor duration nor one of acl or url were provided.
      */
-    public function generate($path = null)
+    public function generate(string $path = null): ?string
     {
         if (! $this->isEnabled()) {
             return null;
         }
 
-        list($start, $expiration) = $this->handleLifetime();
+        [$start, $expiration] = $this->handleLifetime();
 
         if (empty($path) && empty($this->config->acl)) {
             throw new UnexpectedValueException('AuthToken must contain either acl or url property');
@@ -168,20 +168,20 @@ class AuthToken
      *
      * @return array including start time and expiration
      */
-    private function handleLifetime()
+    private function handleLifetime(): array
     {
         $start      = $this->config->startTime;
         $expiration = $this->config->expiration;
         $duration   = $this->config->duration;
 
-        if (! strcasecmp($start, 'now')) {
+        if (! strcasecmp((string)$start, 'now')) {
             $start = Utils::unixTimeNow();
         } elseif (is_numeric($start)) {
             $start = (int)$start;
         }
         if (! isset($expiration)) {
             if (isset($duration)) {
-                $expiration = (isset($start) ? $start : Utils::unixTimeNow()) + $duration;
+                $expiration = ($start ?? Utils::unixTimeNow()) + $duration;
             } else {
                 throw new InvalidArgumentException('Must provide \'expiration\' or \'duration\'.');
             }
@@ -193,7 +193,7 @@ class AuthToken
     /**
      * Escapes a url using lowercase hex characters
      *
-     * @param string $url The URL to escape
+     * @param string|mixed $url The URL to escape
      *
      * @return string|string[]|null escaped URL
      */

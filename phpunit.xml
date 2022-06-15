@@ -10,7 +10,6 @@
         convertWarningsToExceptions = "true"
         processIsolation            = "false"
         stopOnFailure               = "false"
-        syntaxCheck                 = "false"
 >
 
     <testsuites>
@@ -22,13 +21,13 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <blacklist>
+    <coverage processUncoveredFiles="true">
+        <exclude>
             <directory suffix=".php">./vendor</directory>
-        </blacklist>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        </exclude>
+        <include >
             <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 
 </phpunit>

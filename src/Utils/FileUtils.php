@@ -20,16 +20,16 @@ class FileUtils
     /**
      * @var int Maximum number of characters allowed for the file extension.
      */
-    const MAX_FILE_EXTENSION_LEN = 5;
+    protected const MAX_FILE_EXTENSION_LEN = 5;
 
     /**
      * Helper function that removes current dir(.) if no dirname found.
      *
      * @param $path
      *
-     * @return mixed|null
+     * @return string|array|null
      */
-    public static function dirName($path)
+    public static function dirName($path): string|array|null
     {
         return ! empty($path) && pathinfo($path, PATHINFO_DIRNAME) !== '.' ? pathinfo($path, PATHINFO_DIRNAME) : null;
     }
@@ -43,7 +43,7 @@ class FileUtils
      *
      * @return array containing filename and extension.
      */
-    public static function splitPathFilenameExtension($fullPath)
+    public static function splitPathFilenameExtension(string $fullPath): array
     {
         if (empty($fullPath)) {
             return ['', '', ''];
@@ -70,7 +70,7 @@ class FileUtils
      *
      * @return string
      */
-    public static function removeFileExtension($path)
+    public static function removeFileExtension($path): string
     {
         return implode('/', ArrayUtils::safeFilter([self::dirName($path), pathinfo($path, PATHINFO_FILENAME)]));
     }

@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
  * Backwards compatibility with PSR Log v1.
  */
 $r = new \ReflectionClass(LoggerInterface::class);
-if ( PHP_MAJOR_VERSION < 7 || !$r->getMethod('log')->hasReturnType()) {
+if ( !$r->getMethod('log')->hasReturnType()) {
     /**
      * Logger decorator trait that exposes PSR-3 Logger methods.
      */
@@ -44,14 +44,14 @@ class LoggerDecorator implements LoggerInterface
 {
     use LoggerDecoratorTrait;
     /**
-     * @var Logger
+     * @var ?Logger
      */
-    private $logger;
+    private ?Logger $logger = null;
 
     /**
-     * @var LoggingConfig
+     * @var LoggingConfig|null
      */
-    private $config;
+    private ?LoggingConfig $config;
 
     /**
      * LoggerDecorator constructor.
@@ -68,7 +68,7 @@ class LoggerDecorator implements LoggerInterface
      *
      * @return TestHandler|null
      */
-    public function getTestHandler()
+    public function getTestHandler(): ?TestHandler
     {
         if ($this->logger !== null) {
             return $this->logger->getTestHandler();
@@ -82,7 +82,7 @@ class LoggerDecorator implements LoggerInterface
      *
      * @return HandlerInterface[]
      */
-    public function getHandlers()
+    public function getHandlers(): array
     {
         if ($this->logger !== null) {
             return $this->logger->getHandlers();

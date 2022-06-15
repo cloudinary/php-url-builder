@@ -27,15 +27,15 @@ class AuthTokenTestCase extends AssetTestCase
     const AUTH_TOKEN_TEST_CONFIG_ACL = '/*/t_foobar';
     const AUTH_TOKEN_TEST_PATH       = 'https://test123.media.cloudinary.net/v1486020273/sample.jpg';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Configuration::instance()->importCloudinaryUrl(
-            $this->cloudinaryUrl.
-            '?auth_token[duration]='.self::DURATION.
-            '&auth_token[start_time]='.static::START_TIME.
-            '&auth_token[key]='.self::AUTH_TOKEN_KEY.
+            $this->cloudinaryUrl .
+            '?auth_token[duration]=' . self::DURATION .
+            '&auth_token[start_time]=' . static::START_TIME .
+            '&auth_token[key]=' . self::AUTH_TOKEN_KEY .
             '&url[sign_url]=true'
         );
     }

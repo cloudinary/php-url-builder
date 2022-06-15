@@ -13,7 +13,6 @@ namespace Cloudinary\Configuration;
 use Cloudinary\Exception\ConfigurationException;
 use Cloudinary\JsonUtils;
 use Cloudinary\StringUtils;
-use Psr\Http\Message\UriInterface;
 
 /**
  * Defines the available global configurations.
@@ -119,10 +118,10 @@ class Configuration implements ConfigurableInterface
      */
     protected function initSections()
     {
-        $this->cloud                 = new CloudConfig();
-        $this->url                   = new UrlConfig();
-        $this->authToken             = new AuthTokenConfig();
-        $this->logging               = new LoggingConfig();
+        $this->cloud     = new CloudConfig();
+        $this->url       = new UrlConfig();
+        $this->authToken = new AuthTokenConfig();
+        $this->logging   = new LoggingConfig();
     }
 
     /**
@@ -181,7 +180,7 @@ class Configuration implements ConfigurableInterface
      *
      * @return static
      */
-    public static function fromJson($json)
+    public static function fromJson($json): static
     {
         return new self($json);
     }
@@ -193,7 +192,7 @@ class Configuration implements ConfigurableInterface
      *
      * @return static
      */
-    public static function fromParams($params)
+    public static function fromParams(array $params): static
     {
         return new self($params);
     }
@@ -205,7 +204,7 @@ class Configuration implements ConfigurableInterface
      *
      * @return static
      */
-    public static function fromCloudinaryUrl($cloudinaryUrl)
+    public static function fromCloudinaryUrl(string $cloudinaryUrl): static
     {
         return new self($cloudinaryUrl);
     }
@@ -213,11 +212,11 @@ class Configuration implements ConfigurableInterface
     /**
      * This is the actual constructor.
      *
-     * @param $json
+     * @param array|string $json
      *
      * @return Configuration
      */
-    public function importJson($json)
+    public function importJson(array|string $json): static
     {
         $json = JsonUtils::decode($json);
 
@@ -232,11 +231,11 @@ class Configuration implements ConfigurableInterface
     /**
      * Imports configuration from a cloudinary URL.
      *
-     * @param string|UriInterface $cloudinaryUrl The cloudinary URL.
+     * @param string $cloudinaryUrl The cloudinary URL.
      *
      * @return Configuration
      */
-    public function importCloudinaryUrl($cloudinaryUrl)
+    public function importCloudinaryUrl(string $cloudinaryUrl): static
     {
         $this->importJson(ConfigUtils::parseCloudinaryUrl($cloudinaryUrl));
 
@@ -250,14 +249,14 @@ class Configuration implements ConfigurableInterface
      *
      * @return Configuration
      */
-    public function importConfig($otherConfig)
+    public function importConfig(Configuration $otherConfig): static
     {
         $this->importJson($otherConfig->jsonSerialize());
 
         return $this;
     }
 
-    public function validate()
+    public function validate(): void
     {
         if (empty($this->cloud->cloudName)) {
             throw new ConfigurationException('Invalid configuration, please set up your environment');
@@ -269,7 +268,7 @@ class Configuration implements ConfigurableInterface
      *
      * @return string Resulting Cloudinary url
      */
-    public function toString()
+    public function toString(): string
     {
         $url = ConfigUtils::buildCloudinaryUrl($this->jsonSerialize());
 
@@ -279,9 +278,7 @@ class Configuration implements ConfigurableInterface
             $sections [] = (string)($this->$section);
         }
 
-        $url = implode('?', array_filter([$url, implode('&', array_filter($sections))]));
-
-        return $url;
+        return implode('?', array_filter([$url, implode('&', array_filter($sections))]));
     }
 
     /**
@@ -301,11 +298,13 @@ class Configuration implements ConfigurableInterface
      * @param bool $includeEmptyKeys     Whether to include keys without values.
      * @param bool $includeEmptySections Whether to include sections without keys with non-empty values.
      *
-     * @return mixed data which can be serialized by json_encode.
+     * @return array data which can be serialized by json_encode.
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize($includeSensitive = true, $includeEmptyKeys = false, $includeEmptySections = false)
-    {
+    public function jsonSerialize(
+        bool $includeSensitive = true,
+        bool $includeEmptyKeys = false,
+        bool $includeEmptySections = false
+    ): array {
         $json = ['version' => self::VERSION];
 
         foreach ($this->sections as $section) {

@@ -28,21 +28,21 @@ class Cloudinary
      *
      * @var string VERSION
      */
-    const VERSION = '0.1.0-beta';
+    public const VERSION = '0.1.0-beta';
 
     /**
      * Defines the Cloudinary cloud details and other global configuration options.
      *
      * @var Configuration $configuration
      */
-    public $configuration;
+    public Configuration $configuration;
 
     /**
      * Cloudinary constructor.
      *
-     * @param Configuration|string|array|null $config The Configuration source.
+     * @param array|string|Configuration|null $config The Configuration source.
      */
-    public function __construct($config = null)
+    public function __construct(Configuration|array|string $config = null)
     {
         $this->configuration = new Configuration($config);
         $this->configuration->validate();
@@ -51,11 +51,11 @@ class Cloudinary
     /**
      * Creates a new Image instance using the current configuration instance.
      *
-     * @param string $publicId The public ID of the image.
+     * @param string|mixed $publicId The public ID of the image.
      *
      * @return Image
      */
-    public function image($publicId)
+    public function image(mixed $publicId): Image
     {
         return $this->createWithConfiguration($publicId, Image::class);
     }
@@ -63,11 +63,11 @@ class Cloudinary
     /**
      * Creates a new Media instance using the current configuration instance.
      *
-     * @param string $publicId The public ID of the media.
+     * @param string|mixed $publicId The public ID of the media.
      *
-     * @return Image
+     * @return Media
      */
-    public function media($publicId)
+    public function media(mixed $publicId): Media
     {
         return $this->createWithConfiguration($publicId, Media::class);
     }
@@ -79,7 +79,7 @@ class Cloudinary
      *
      * @return Video
      */
-    public function video($publicId)
+    public function video(mixed $publicId): Video
     {
         return $this->createWithConfiguration($publicId, Video::class);
     }
@@ -91,7 +91,7 @@ class Cloudinary
      *
      * @return File
      */
-    public function raw($publicId)
+    public function raw(mixed $publicId): File
     {
         return $this->createWithConfiguration($publicId, File::class);
     }
@@ -99,7 +99,7 @@ class Cloudinary
     /**
      * Creates a new object and imports current instance configuration.
      *
-     * @param mixed  $publicId  The public Id or the object.
+     * @param mixed  $publicId  The public ID or the object.
      * @param string $className The class name of the object to create.
      * @param mixed  ...$args   Additional constructor arguments.
      *
@@ -107,7 +107,7 @@ class Cloudinary
      *
      * @internal
      */
-    protected function createWithConfiguration($publicId, $className, ...$args)
+    protected function createWithConfiguration(mixed $publicId, string $className, ...$args): mixed
     {
         $instance = ClassUtils::forceInstance($publicId, $className, null, $this->configuration, ...$args);
         // this covers the case when an instance of the asset is provided and the line above is a no op.

@@ -26,22 +26,22 @@ abstract class BaseConfigSection implements ConfigurableInterface
     /**
      * @var string Placeholder for configuration name, must de defined in each derived class.
      */
-    const CONFIG_NAME = 'BASE_CONFIG';
+    protected const CONFIG_NAME = 'BASE_CONFIG';
 
     /**
      * @var array of configuration keys that contain sensitive data that should not be exported (for example api key).
      */
-    protected static $sensitiveDataKeys = [];
+    protected static array $sensitiveDataKeys = [];
 
     /**
      * @var array of configuration key aliases (usually used for deprecated keys backwards compatibility).
      */
-    protected static $aliases = [];
+    protected static array $aliases = [];
 
     /**
      * @var array of configuration keys that were explicitly set by user. Used to distinguish from default values.
      */
-    protected $explicitlySetKeys = [];
+    protected array $explicitlySetKeys = [];
 
 
     /**
@@ -50,7 +50,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      * @param      $parameters
      * @param bool $includeSensitive
      */
-    public function __construct($parameters = null, $includeSensitive = true)
+    public function __construct($parameters = null, bool $includeSensitive = true)
     {
         $this->importParams($parameters, $includeSensitive);
     }
@@ -64,7 +64,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @return mixed|null Property value.
      */
-    public function __get($property)
+    public function __get(string $property)
     {
         if (! property_exists($this, $property)) {
             trigger_error('Undefined property: ' . static::class . '::$' . $property, E_USER_NOTICE);
@@ -88,7 +88,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      * @param string $name  Property name.
      * @param mixed  $value Property value.
      */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value)
     {
         $this->$name = $value;
 
@@ -105,7 +105,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @internal
      */
-    public function setConfig($name, $value)
+    public function setConfig(string $name, mixed $value): static
     {
         $this->__set(StringUtils::snakeCaseToCamelCase($name), $value);
 
@@ -121,7 +121,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @internal
      */
-    public function isExplicitlySet($name)
+    public function isExplicitlySet(string $name): bool
     {
         return ArrayUtils::get($this->explicitlySetKeys, StringUtils::snakeCaseToCamelCase($name), false);
     }
@@ -133,7 +133,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @return bool
      */
-    public function __isset($name)
+    public function __isset(string $name)
     {
         $getter = 'get' . ucfirst($name);
         if (method_exists($this, $getter)) {
@@ -146,12 +146,12 @@ abstract class BaseConfigSection implements ConfigurableInterface
     /**
      * Imports configuration properties from an array of parameters.
      *
-     * @param array $parameters       Configuration section parameters.
-     * @param bool  $includeSensitive Whether to include sensitive keys.
+     * @param array|null $parameters       Configuration section parameters.
+     * @param bool       $includeSensitive Whether to include sensitive keys.
      *
      * @return static
      */
-    public function importParams($parameters, $includeSensitive = true)
+    public function importParams(?array $parameters, bool $includeSensitive = true): static
     {
         $validKeys = self::importableKeys(self::exportableKeys($includeSensitive));
 
@@ -181,7 +181,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @throws InvalidArgumentException In case not all keys are set.
      */
-    public function assertNotEmpty(array $keys)
+    public function assertNotEmpty(array $keys): void
     {
         foreach ($keys as $key) {
             if (empty($this->$key)) {
@@ -197,7 +197,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @return array of keys
      */
-    protected static function exportableKeys($includeSensitive = true)
+    protected static function exportableKeys(bool $includeSensitive = true): array
     {
         $blacklisted = [static::CONFIG_NAME];
         if (! $includeSensitive) {
@@ -215,13 +215,13 @@ abstract class BaseConfigSection implements ConfigurableInterface
     /**
      * Returns an array of importable configuration section keys.
      *
-     * @param array $exportableKeys The exportable keys to extend with aliases.
+     * @param array $importableKeys The exportable keys to extend with aliases.
      *
      * @return array of keys
      */
-    protected static function importableKeys($exportableKeys)
+    protected static function importableKeys(array $importableKeys): array
     {
-        return array_merge($exportableKeys, array_keys(static::$aliases));
+        return array_merge($importableKeys, array_keys(static::$aliases));
     }
 
 
@@ -231,9 +231,9 @@ abstract class BaseConfigSection implements ConfigurableInterface
      * @param array $json             Configuration source.
      * @param bool  $includeSensitive Whether to include sensitive keys.
      *
-     * @return static brand new instance of the configuration section.
+     * @return static the brand-new instance of the configuration section.
      */
-    public static function fromJson($json, $includeSensitive = true)
+    public static function fromJson($json, bool $includeSensitive = true): static
     {
         $json = JsonUtils::decode($json);
 
@@ -253,7 +253,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @return static
      */
-    public static function fromCloudinaryUrl($cloudinaryUrl, $includeSensitive = true)
+    public static function fromCloudinaryUrl(string $cloudinaryUrl, bool $includeSensitive = true): static
     {
         $config = ConfigUtils::parseCloudinaryUrl($cloudinaryUrl);
 
@@ -264,11 +264,11 @@ abstract class BaseConfigSection implements ConfigurableInterface
     /**
      * Imports configuration from a json string or an array as a source.
      *
-     * @param string|array $json Configuration json.
+     * @param array|string $json Configuration json.
      *
      * @return static
      */
-    public function importJson($json)
+    public function importJson(array|string $json): static
     {
         $json = JsonUtils::decode($json);
 
@@ -288,7 +288,7 @@ abstract class BaseConfigSection implements ConfigurableInterface
      *
      * @return static
      */
-    public function importCloudinaryUrl($cloudinaryUrl)
+    public function importCloudinaryUrl(string $cloudinaryUrl): static
     {
         $config = ConfigUtils::parseCloudinaryUrl($cloudinaryUrl);
 
@@ -298,13 +298,13 @@ abstract class BaseConfigSection implements ConfigurableInterface
     /**
      * Serialises configuration section to a string representation.
      *
-     * @param array $excludedKeys     The keys to exclude from export to string.
+     * @param array $excludedKeys The keys to exclude from export to string.
      *
      * @return string
      */
-    public function toString($excludedKeys = [])
+    public function toString(array $excludedKeys = []): string
     {
-        $sectionJson                      = $this->jsonSerialize();
+        $sectionJson = $this->jsonSerialize();
 
         if (empty($sectionJson)) {
             return '';
@@ -338,13 +338,16 @@ abstract class BaseConfigSection implements ConfigurableInterface
      * @return mixed data which can be serialized by json_encode.
      */
     #[\ReturnTypeWillChange]
-    public function jsonSerialize($includeSensitive = true, $includeEmptyKeys = false, $includeEmptySections = false)
-    {
+    public function jsonSerialize(
+        bool $includeSensitive = true,
+        bool $includeEmptyKeys = false,
+        bool $includeEmptySections = false
+    ): array {
         $keys = [];
         // set class properties
         foreach (self::exportableKeys($includeSensitive) as $key) {
             $propertyName = StringUtils::snakeCaseToCamelCase($key);
-            if (property_exists(static::class, $propertyName)
+            if (property_exists(static::class, $propertyName) && isset($this->$propertyName)
                 && ($includeEmptyKeys || $this->$propertyName !== null)
             ) {
                 $keys[$key] = $this->$propertyName;

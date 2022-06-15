@@ -145,17 +145,17 @@ trait LoggerTrait
     /**
      * @var LoggingConfig $logging
      */
-    public $logging;
+    public LoggingConfig $logging;
 
     /**
-     * @var LoggerInterface $logger
+     * @var ?LoggerInterface $logger
      */
-    private $logger;
+    private ?LoggerInterface $logger = null;
 
     /**
-     * @return LoggerInterface
+     * @return LoggerDecorator|LoggerInterface
      */
-    protected function getLogger()
+    protected function getLogger(): LoggerDecorator|LoggerInterface
     {
         if ($this->logger === null) {
             $this->logger = new LoggerDecorator($this->logging);

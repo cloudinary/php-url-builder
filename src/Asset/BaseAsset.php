@@ -18,6 +18,7 @@ use Cloudinary\Configuration\LoggingConfig;
 use Cloudinary\Configuration\UrlConfig;
 use Cloudinary\JsonUtils;
 use Cloudinary\Log\LoggerTrait;
+use Exception;
 
 /**
  * Class BaseAsset
@@ -118,23 +119,27 @@ abstract class BaseAsset implements AssetInterface
      * @param string $string The asset string (URL).
      *
      * @return mixed
+     * @throws Exception
      */
-    public static function fromString($string)
+    public static function fromString(string $string): static
     {
         //TODO: Parse URL and populate the asset
+        throw new Exception('Not implemented');
     }
 
 
     /**
      * Creates a new asset from the provided JSON.
      *
-     * @param string|array $json The asset json. Can be an array or a JSON string.
+     * @param array|string $json The asset json. Can be an array or a JSON string.
      *
      * @return mixed
+     * @throws Exception
      */
-    public static function fromJson($json)
+    public static function fromJson(array|string $json): static
     {
         //TODO: implement me
+        throw new Exception('Not implemented');
     }
 
     /**
@@ -142,22 +147,24 @@ abstract class BaseAsset implements AssetInterface
      *
      * @param string $string The asset string (URL).
      *
-     * @return mixed
+     * @return static
+     * @throws Exception
      */
-    public function importString($string)
+    public function importString(string $string): static
     {
         //TODO: implement me
+        throw new Exception('Not implemented');
     }
 
 
     /**
      * Imports data from the provided JSON.
      *
-     * @param string|array $json The asset json. Can be an array or a JSON string.
+     * @param array|string $json The asset json. Can be an array or a JSON string.
      *
-     * @return mixed
+     * @return static
      */
-    public function importJson($json)
+    public function importJson(array|string $json): static
     {
         try {
             $json = JsonUtils::decode($json);
@@ -190,7 +197,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @return static
      */
-    public function configuration($configuration)
+    public function configuration(Configuration|array $configuration): static
     {
         $tempConfiguration = new Configuration($configuration, true); // TODO: improve performance here
         $this->cloud       = $tempConfiguration->cloud;
@@ -224,7 +231,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @return string
      */
-    public function getPublicId($omitExtension = false)
+    public function getPublicId(bool $omitExtension = false): string
     {
         return $this->asset->publicId($omitExtension);
     }
@@ -236,7 +243,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @return static
      */
-    public function setPublicId($publicId)
+    public function setPublicId(string $publicId): static
     {
         $this->asset->setPublicId($publicId);
 
@@ -250,7 +257,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @internal
      */
-    protected function prepareUrlParts()
+    protected function prepareUrlParts(): array
     {
         return [
             'distribution' => $this->finalizeDistribution(),
@@ -265,7 +272,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @return string
      */
-    public function toUrl()
+    public function toUrl(): string
     {
         return $this->finalizeUrl(ArrayUtils::implodeUrl($this->prepareUrlParts()));
     }
@@ -294,7 +301,7 @@ abstract class BaseAsset implements AssetInterface
      * @return mixed
      */
     #[\ReturnTypeWillChange]
-    public function jsonSerialize($includeEmptyKeys = false, $includeEmptySections = false)
+    public function jsonSerialize(bool $includeEmptyKeys = false, bool $includeEmptySections = false): mixed
     {
         $json = $this->asset->jsonSerialize($includeEmptyKeys);
 
@@ -319,7 +326,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @internal
      */
-    public function setAssetProperty($propertyName, $propertyValue)
+    public function setAssetProperty(string $propertyName, mixed $propertyValue): static
     {
         try {
             $this->asset->setAssetProperty($propertyName, $propertyValue);
@@ -349,7 +356,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @internal
      */
-    public function setCloudConfig($configKey, $configValue)
+    public function setCloudConfig($configKey, $configValue): static
     {
         $this->cloud->setCloudConfig($configKey, $configValue);
 
@@ -366,7 +373,7 @@ abstract class BaseAsset implements AssetInterface
      *
      * @internal
      */
-    public function setUrlConfig($configKey, $configValue)
+    public function setUrlConfig($configKey, $configValue): static
     {
         $this->urlConfig->setUrlConfig($configKey, $configValue);
 

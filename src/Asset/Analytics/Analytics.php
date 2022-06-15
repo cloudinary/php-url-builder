@@ -21,25 +21,25 @@ use OutOfRangeException;
  */
 class Analytics
 {
-    const QUERY_KEY    = '_a';
-    const ALGO_VERSION = 'A'; // The version of the algorithm
-    const SDK_CODE     = 'A'; // Cloudinary PHP SDK
+    public const QUERY_KEY    = '_a';
+    protected const ALGO_VERSION = 'A'; // The version of the algorithm
+    protected const SDK_CODE     = 'A'; // Cloudinary PHP SDK
 
-    protected static $sdkVersion  = Cloudinary::VERSION;
-    protected static $techVersion = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
+    protected static string $sdkVersion  = Cloudinary::VERSION;
+    protected static string $techVersion = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
 
-    const CHARS           = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-    const BINARY_PAD_SIZE = 6;
+    protected const CHARS           = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    protected const BINARY_PAD_SIZE = 6;
 
-    protected static $charCodes = [];
-    protected static $signature;
+    protected static array $charCodes = [];
+    protected static ?string $signature;
 
     /**
      * Gets the SDK signature by encoding the SDK version and tech version.
      *
      * @return string
      */
-    public static function sdkAnalyticsSignature()
+    public static function sdkAnalyticsSignature(): string
     {
         if (empty(static::$signature)) {
             // Lazily create $signature
@@ -77,7 +77,7 @@ class Analytics
      *
      * @throws OutOfRangeException when version is larger than 43.21.26
      */
-    protected static function encodeVersion($version)
+    protected static function encodeVersion(string $version): string
     {
         $parts = explode('.', $version);
 
@@ -111,9 +111,9 @@ class Analytics
      *
      * @param string $binaryValue The value.
      *
-     * @return array|mixed
+     * @return string
      */
-    protected static function getKey($binaryValue)
+    protected static function getKey(string $binaryValue): string
     {
         if (empty(self::$charCodes)) {
             // let's lazily populate $charCodes
@@ -133,7 +133,7 @@ class Analytics
      *
      * @return string
      */
-    protected static function intToPaddedBin($integer, $padNum)
+    protected static function intToPaddedBin(int $integer, int $padNum): string
     {
         return str_pad(decbin($integer), $padNum, "0", STR_PAD_LEFT);
     }

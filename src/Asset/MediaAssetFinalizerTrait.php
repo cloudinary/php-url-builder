@@ -27,14 +27,16 @@ trait MediaAssetFinalizerTrait
     /**
      * Finalizes asset transformation.
      *
-     * @param string|CommonTransformation $withTransformation Additional transformation
-     * @param bool                        $append             Whether to append transformation or set in instead of the
-     *                                                        asset transformation
+     * @param string|CommonTransformation|null $withTransformation Additional transformation
+     * @param bool                             $append             Whether to append transformation or set in instead
+     *                                                             of the asset transformation
      *
      * @return string
      */
-    protected function finalizeTransformation($withTransformation = null, $append = true)
-    {
+    protected function finalizeTransformation(
+        CommonTransformation|string $withTransformation = null,
+        bool $append = true
+    ): string {
         if ($withTransformation === null) {
             return (string)$this->transformation;
         }
@@ -55,7 +57,7 @@ trait MediaAssetFinalizerTrait
      *
      * @return string
      */
-    protected function finalizeSimpleSignature()
+    protected function finalizeSimpleSignature(): string
     {
         if (! $this->urlConfig->signUrl || $this->authToken->isEnabled()) {
             return '';

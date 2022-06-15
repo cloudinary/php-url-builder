@@ -60,7 +60,7 @@ abstract class AssetTestCase extends UnitTestCase
     const DEFAULT_ASSET_VERSION     = 1;
     const DEFAULT_ASSET_VERSION_STR = 'v' . self::DEFAULT_ASSET_VERSION;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

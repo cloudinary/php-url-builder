@@ -28,7 +28,7 @@ class AuthTokenTest extends AuthTokenTestCase
      */
     protected $authToken;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -49,11 +49,10 @@ class AuthTokenTest extends AuthTokenTestCase
         );
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testMustProvideExpirationOrDuration()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $message                             = 'Should throw if expiration and duration are not provided';
         $this->authToken->config->expiration = null;
         $this->authToken->config->duration   = null;

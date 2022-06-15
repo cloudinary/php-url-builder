@@ -29,11 +29,10 @@ class CloudinaryTest extends UnitTestCase
         self::assertNotNull($c->configuration->cloud->apiSecret);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCloudinaryUrlNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         self::clearEnvironment();
 
         new Cloudinary(); // Boom!

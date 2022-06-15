@@ -23,7 +23,7 @@ trait AssetDescriptorTrait
      *
      * @return $this
      */
-    public function version($version)
+    public function version(int|string $version): static
     {
         return $this->setAssetProperty('version', $version);
     }
@@ -35,7 +35,7 @@ trait AssetDescriptorTrait
      *
      * @return $this
      */
-    public function location($location)
+    public function location(string $location): static
     {
         return $this->setAssetProperty('location', $location);
     }
@@ -47,7 +47,7 @@ trait AssetDescriptorTrait
      *
      * @return $this
      */
-    public function filename($filename)
+    public function filename(string $filename): static
     {
         return $this->setAssetProperty('filename', $filename);
     }
@@ -59,7 +59,7 @@ trait AssetDescriptorTrait
      *
      * @return $this
      */
-    public function extension($extension)
+    public function extension(string $extension): static
     {
         return $this->setAssetProperty('extension', $extension);
     }
@@ -74,5 +74,5 @@ trait AssetDescriptorTrait
      *
      * @internal
      */
-    abstract public function setAssetProperty($propertyName, $propertyValue);
+    abstract public function setAssetProperty(string $propertyName, mixed $propertyValue): static;
 }

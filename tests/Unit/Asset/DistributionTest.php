@@ -27,7 +27,7 @@ final class DistributionTest extends AssetTestCase
      */
     protected $image;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -117,7 +117,7 @@ final class DistributionTest extends AssetTestCase
 
         $config->url->analytics();
 
-        self::assertContains(
+        self::assertStringContainsString(
             '?' . Analytics::QUERY_KEY . '=',
             (string)new Image(self::ASSET_ID, $config)
         );
@@ -129,7 +129,7 @@ final class DistributionTest extends AssetTestCase
 
         $config->url->analytics();
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             '?' . Analytics::QUERY_KEY . '=',
             (string)new Image(self::FETCH_IMAGE_URL_WITH_QUERY, $config)
         );
@@ -144,13 +144,13 @@ final class DistributionTest extends AssetTestCase
 
         $config->url->signUrl()->analytics();
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             '?' . Analytics::QUERY_KEY . '=',
             (string)new Image(self::ASSET_ID, $config)
         );
 
-        self::assertContains(
-            AuthToken::AUTH_TOKEN_NAME,
+        self::assertStringContainsString(
+            '__cld_token__',
             (string)new Image(self::ASSET_ID, $config)
         );
     }

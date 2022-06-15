@@ -12,35 +12,37 @@ namespace Cloudinary\Configuration;
 
 /**
  * Defines the configuration for delivering token-based authenticated media assets.
- * **Learn more**: <a href=https://cloudinary.com/documentation/control_access_to_media#delivering_token_based_authenticated_media_assets target="_blank">Delivering token based authenticated media assets</a>
+ * **Learn more**: <a
+ * href=https://cloudinary.com/documentation/control_access_to_media#delivering_token_based_authenticated_media_assets
+ * target="_blank">Delivering token based authenticated media assets</a>
  *
  * @api
  */
 class AuthTokenConfig extends BaseConfigSection
 {
-    const CONFIG_NAME = 'auth_token';
+    public const CONFIG_NAME = 'auth_token';
 
     // Supported parameters
-    const KEY        = 'key';
-    const IP         = 'ip';
-    const ACL        = 'acl';
-    const START_TIME = 'start_time';
-    const EXPIRATION = 'expiration';
-    const DURATION   = 'duration';
+    protected const KEY        = 'key';
+    protected const IP         = 'ip';
+    protected const ACL        = 'acl';
+    protected const START_TIME = 'start_time';
+    protected const EXPIRATION = 'expiration';
+    protected const DURATION   = 'duration';
 
     /**
      * (Required) – the token must be signed with the encryption key received from Cloudinary.
      *
-     * @var string
+     * @var string|null
      */
-    public $key;
+    public ?string $key = null;
 
     /**
      * (Optional) – only this IP address can access the resource.
      *
-     * @var string
+     * @var string|null
      */
-    public $ip;
+    public ?string $ip = null;
 
     /**
      * (Optional) – an Access Control List for limiting the allowed URL path to a specified pattern (e.g.,
@@ -52,28 +54,28 @@ class AuthTokenConfig extends BaseConfigSection
      * that can be added to a number of different URLs that share a common transformation. Without this parameter,
      * the pattern defaults to the full URL path of the requested asset.
      *
-     * @var string|array
+     * @var string|array|null
      */
-    public $acl;
+    public string|array|null $acl = null;
 
     /**
      * (Optional) – timestamp of the UNIX time when the URL becomes valid. Default value: the current time.
      *
-     * @var int
+     * @var int|null
      */
-    public $startTime;
+    public ?int $startTime = null;
 
     /**
      * (Optional) – timestamp of the UNIX time when the URL expires.
      *
-     * @var int
+     * @var int|null
      */
-    public $expiration;
+    public ?int $expiration = null;
 
     /**
      * (Optional) – the duration that the URL is valid in seconds (counted from start_time).
      *
-     * @var int
+     * @var int|null
      */
-    public $duration;
+    public ?int $duration = null;
 }

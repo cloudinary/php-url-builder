@@ -28,14 +28,13 @@ class ConfigUtils
     /**
      * Checks whether the supplied string is a valid cloudinary url
      *
-     * @param string $cloudinaryUrl Cloudinary url candidate
+     * @param mixed $cloudinaryUrl Cloudinary url candidate
      *
      * @return bool
      */
-    public static function isCloudinaryUrl($cloudinaryUrl)
+    public static function isCloudinaryUrl(mixed $cloudinaryUrl): bool
     {
-        return Utils::tryParseUrl(self::normalizeCloudinaryUrl($cloudinaryUrl), [self::CLOUDINARY_URL_SCHEME]) ? true
-            : false;
+        return (bool)Utils::tryParseUrl(self::normalizeCloudinaryUrl($cloudinaryUrl), [self::CLOUDINARY_URL_SCHEME]);
     }
 
     /**
@@ -122,11 +121,9 @@ class ConfigUtils
 
         $res .= ArrayUtils::get($config, [CloudConfig::CONFIG_NAME, CloudConfig::CLOUD_NAME]);
 
-        $res = ArrayUtils::implodeFiltered(
+        return ArrayUtils::implodeFiltered(
             '/',
             [$res, ArrayUtils::get($config, [UrlConfig::CONFIG_NAME, UrlConfig::DOMAIN])]
         );
-
-        return $res;
     }
 }

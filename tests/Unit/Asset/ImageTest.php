@@ -39,7 +39,7 @@ final class ImageTest extends AssetTestCase
      */
     protected $image;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

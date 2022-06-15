@@ -26,7 +26,7 @@ class AssetAuthTokenTest extends AuthTokenTestCase
      */
     protected $image;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

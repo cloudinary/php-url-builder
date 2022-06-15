@@ -24,42 +24,42 @@ class UrlConfig extends BaseConfigSection
     /**
      * @internal
      */
-    const CONFIG_NAME = 'url';
+    public const CONFIG_NAME = 'url';
 
     /**
      * @internal
      */
-    const DEFAULT_DOMAIN_NAME = 'cloudinary.net';
+    protected const DEFAULT_DOMAIN_NAME = 'cloudinary.net';
 
     /**
      * @internal
      */
-    const DEFAULT_SUB_DOMAIN = 'media';
+    protected const DEFAULT_SUB_DOMAIN = 'media';
 
     /**
      * @internal
      */
-    const DEFAULT_SHARED_DOMAIN = self::DEFAULT_SUB_DOMAIN . '.' . self::DEFAULT_DOMAIN_NAME;
+    public const DEFAULT_SHARED_DOMAIN = self::DEFAULT_SUB_DOMAIN . '.' . self::DEFAULT_DOMAIN_NAME;
 
-    const PROTOCOL_HTTPS = 'https';
+    public const PROTOCOL_HTTPS = 'https';
 
     /**
      * Default value for forcing version.
      */
-    const DEFAULT_FORCE_VERSION = true;
+    protected const DEFAULT_FORCE_VERSION = true;
 
     /**
      * Default value for analytics.
      */
-    const DEFAULT_ANALYTICS = true;
+    protected const DEFAULT_ANALYTICS = true;
 
     // Supported parameters
-    const DOMAIN             = 'domain';
-    const SHARED_DOMAIN      = 'shared_domain';
-    const SIGN_URL           = 'sign_url';
-    const LONG_URL_SIGNATURE = 'long_url_signature';
-    const FORCE_VERSION      = 'force_version';
-    const ANALYTICS          = 'analytics';
+    public const DOMAIN             = 'domain';
+    public const SHARED_DOMAIN      = 'shared_domain';
+    public const SIGN_URL           = 'sign_url';
+    public const LONG_URL_SIGNATURE = 'long_url_signature';
+    public const FORCE_VERSION      = 'force_version';
+    public const ANALYTICS          = 'analytics';
 
 
     /**
@@ -70,24 +70,24 @@ class UrlConfig extends BaseConfigSection
      *
      * @see https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames
      */
-    public $domain;
+    public string $domain;
 
     /**
      * The shared domain to use.
      *
-     * @var bool
+     * @var string
      * @internal
      */
-    protected $sharedDomain;
+    protected string $sharedDomain;
 
     /**
      * Set to true to create a Cloudinary URL signed with the first 8 characters of a SHA-1 hash.
      *
-     * @var bool
+     * @var bool|null
      *
      * @see https://cloudinary.com/documentation/advanced_url_delivery_options#generating_delivery_url_signatures
      */
-    public $signUrl;
+    public ?bool $signUrl = null;
 
     /**
      * Setting both this and signUrl to true will sign the URL using the first 32 characters of a SHA-256 hash.
@@ -96,21 +96,21 @@ class UrlConfig extends BaseConfigSection
      *
      * @see https://cloudinary.com/documentation/advanced_url_delivery_options#generating_delivery_url_signatures
      */
-    public $longUrlSignature;
+    public ?bool $longUrlSignature = null;
 
     /**
      * Set to false to omit default version string for assets in folders in the delivery URL.
      *
      * @var bool
      */
-    protected $forceVersion;
+    protected ?bool $forceVersion = null;
 
     /**
      * Set to "false" to omit analytics data.
      *
      * @var bool
      */
-    protected $analytics;
+    protected ?bool $analytics = null;
 
     /**
      * Serialises configuration section to a string representation.
@@ -133,7 +133,7 @@ class UrlConfig extends BaseConfigSection
      *
      * @internal
      */
-    public function setUrlConfig($configKey, $configValue)
+    public function setUrlConfig(string $configKey, mixed $configValue): static
     {
         return $this->setConfig($configKey, $configValue);
     }

@@ -20,11 +20,11 @@ use Psr\Http\Message\UriInterface;
  */
 class Utils
 {
-    const ALGO_SHA1                      = 'sha1';
-    const ALGO_SHA256                    = 'sha256';
-    const SUPPORTED_SIGNATURE_ALGORITHMS = [self::ALGO_SHA1, self::ALGO_SHA256];
-    const SHORT_URL_SIGNATURE_LENGTH     = 8;
-    const LONG_URL_SIGNATURE_LENGTH      = 32;
+    public const ALGO_SHA1                      = 'sha1';
+    public const ALGO_SHA256                    = 'sha256';
+    public const SUPPORTED_SIGNATURE_ALGORITHMS = [self::ALGO_SHA1, self::ALGO_SHA256];
+    public const SHORT_URL_SIGNATURE_LENGTH     = 8;
+    public const LONG_URL_SIGNATURE_LENGTH      = 32;
 
 
     /**
@@ -35,7 +35,7 @@ class Utils
      *
      * @return string
      */
-    public static function formatSimpleSignature($signature, $length)
+    public static function formatSimpleSignature(string $signature, int $length): string
     {
         return 's--' . substr($signature, 0, $length) . '--';
     }
@@ -43,14 +43,14 @@ class Utils
     /**
      * Creates a signature for content using specified secret.
      *
-     * @param string $content
-     * @param string $secret
-     * @param bool   $raw
-     * @param string $algo
+     * @param string    $content
+     * @param string    $secret
+     * @param bool|null $raw
+     * @param string    $algo
      *
      * @return string
      */
-    public static function sign($content, $secret, $raw = null, $algo = self::ALGO_SHA1)
+    public static function sign(string $content, string $secret, bool $raw = null, string $algo = self::ALGO_SHA1)
     {
         return hash($algo, $content . $secret, $raw);
     }
@@ -58,12 +58,12 @@ class Utils
     /**
      * Parses URL if applicable, otherwise returns false.
      *
-     * @param string|UriInterface $url            The URL to parse.
-     * @param array|null          $allowedSchemes Optional array of the allowed schemes.
+     * @param mixed      $url            The URL to parse.
+     * @param array|null $allowedSchemes Optional array of the allowed schemes.
      *
-     * @return false|UriInterface
+     * @return UriInterface|bool|string
      */
-    public static function tryParseUrl($url, array $allowedSchemes = null)
+    public static function tryParseUrl(mixed $url, array $allowedSchemes = null): UriInterface|bool|string
     {
         if (! $url instanceof UriInterface) {
             if (! is_string($url)) {
@@ -90,7 +90,7 @@ class Utils
      *
      * @return int
      */
-    public static function unixTimeNow()
+    public static function unixTimeNow(): int
     {
         return time();
     }
@@ -102,7 +102,7 @@ class Utils
      *
      * @return array
      */
-    public static function tryParseValues(array $params)
+    public static function tryParseValues(array $params): array
     {
         return array_map(
             static function ($value) {
@@ -127,11 +127,11 @@ class Utils
     /**
      * Parses boolean from string
      *
-     * @param $value
+     * @param mixed $value
      *
-     * @return bool
+     * @return mixed
      */
-    public static function tryParseBoolean($value)
+    public static function tryParseBoolean(mixed $value): mixed
     {
         if (! is_string($value)) {
             return $value;

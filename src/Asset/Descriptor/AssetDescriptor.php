@@ -13,6 +13,7 @@ namespace Cloudinary\Asset;
 use Cloudinary\ArrayUtils;
 use Cloudinary\FileUtils;
 use Cloudinary\JsonUtils;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * Class AssetDescriptor
@@ -22,28 +23,28 @@ use Cloudinary\JsonUtils;
 class AssetDescriptor implements AssetInterface
 {
     /**
-     * @var int|string $version Asset version, typically set to unix timestamp.
+     * @var string|int|null $version Asset version, typically set to unix timestamp.
      */
-    public $version;
+    public string|int|null $version = null;
     /**
-     * @var string $location Can be directory, URL(including path, excluding filename), etc.
+     * @var string|null $location Can be directory, URL(including path, excluding filename), etc.
      */
-    public $location;
+    public ?string $location = null;
     /**
-     * @var string $filename Basename without extension.
+     * @var string|null $filename Basename without extension.
      */
-    public $filename;
+    public ?string $filename = null;
     /**
-     * @var string $extension A.K.A format.
+     * @var string|null $extension A.K.A format.
      */
-    public $extension;
+    public ?string $extension = null;
 
     /**
      * AssetDescriptor constructor.
      *
-     * @param string $publicId  The public ID of the asset.
+     * @param string $publicId The public ID of the asset.
      */
-    public function __construct($publicId)
+    public function __construct(string $publicId)
     {
         $this->setPublicId($publicId);
     }
@@ -55,7 +56,7 @@ class AssetDescriptor implements AssetInterface
      *
      * @return mixed|null
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         trigger_error('Undefined property: ' . static::class . '::$' . $name, E_USER_NOTICE);
 
@@ -69,7 +70,7 @@ class AssetDescriptor implements AssetInterface
      *
      * @return bool
      */
-    public function __isset($key)
+    public function __isset(string $key): bool
     {
         try {
             if (null === $this->__get($key)) {
@@ -88,7 +89,7 @@ class AssetDescriptor implements AssetInterface
      * @param string $name  The class property name.
      * @param mixed  $value The class property value.
      */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value): void
     {
         $this->setAssetProperty($name, $value);
     }
@@ -100,9 +101,9 @@ class AssetDescriptor implements AssetInterface
      *
      * @return $this
      */
-    public function setPublicId($publicId)
+    public function setPublicId(string $publicId): static
     {
-        list($this->location, $this->filename, $this->extension) = FileUtils::splitPathFilenameExtension($publicId);
+        [$this->location, $this->filename, $this->extension] = FileUtils::splitPathFilenameExtension($publicId);
 
         return $this;
     }
@@ -114,7 +115,7 @@ class AssetDescriptor implements AssetInterface
      *
      * @return string
      */
-    public function publicId($noExtension = false)
+    public function publicId(bool $noExtension = false): string
     {
         return ArrayUtils::implodeFiltered(
             '.',
@@ -130,9 +131,9 @@ class AssetDescriptor implements AssetInterface
      *
      * @param string $string The asset string (URL).
      *
-     * @return mixed
+     * @return AssetDescriptor
      */
-    public static function fromString($string)
+    public static function fromString(string $string): static
     {
         throw new \BadMethodCallException('Not Implemented');
     }
@@ -140,11 +141,11 @@ class AssetDescriptor implements AssetInterface
     /**
      * Creates a new asset from the provided JSON.
      *
-     * @param string|array $json The asset json. Can be an array or a JSON string.
+     * @param array|string $json The asset json. Can be an array or a JSON string.
      *
-     * @return mixed
+     * @return AssetDescriptor
      */
-    public static function fromJson($json)
+    public static function fromJson(array|string $json): static
     {
         $new = new self('');
 
@@ -160,7 +161,7 @@ class AssetDescriptor implements AssetInterface
      *
      * @return mixed
      */
-    public function importString($string)
+    public function importString(string $string): static
     {
         throw new \BadMethodCallException('Not Implemented');
     }
@@ -169,11 +170,11 @@ class AssetDescriptor implements AssetInterface
     /**
      * Imports data from the provided JSON.
      *
-     * @param string|array $json The asset json. Can be an array or a JSON string.
+     * @param array|string $json The asset json. Can be an array or a JSON string.
      *
      * @return AssetDescriptor
      */
-    public function importJson($json)
+    public function importJson(array|string $json): static
     {
         $json = JsonUtils::decode($json);
 
@@ -183,10 +184,10 @@ class AssetDescriptor implements AssetInterface
 
         $assetJson = $json['asset'];
 
-        $this->version      = ArrayUtils::get($assetJson, 'version');
-        $this->location     = ArrayUtils::get($assetJson, 'location');
-        $this->filename     = ArrayUtils::get($assetJson, 'filename');
-        $this->extension    = ArrayUtils::get($assetJson, 'extension');
+        $this->version   = ArrayUtils::get($assetJson, 'version');
+        $this->location  = ArrayUtils::get($assetJson, 'location');
+        $this->filename  = ArrayUtils::get($assetJson, 'filename');
+        $this->extension = ArrayUtils::get($assetJson, 'extension');
 
         return $this;
     }
@@ -207,16 +208,16 @@ class AssetDescriptor implements AssetInterface
      *
      * @param bool $includeEmptyKeys Whether to include empty keys.
      *
-     * @return mixed
+     * @return array
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize($includeEmptyKeys = false)
+    #[ArrayShape(['asset' => "array"])]
+    public function jsonSerialize(bool $includeEmptyKeys = false): array
     {
         $dataArr = [
-            'version'       => $this->version,
-            'location'      => $this->location,
-            'filename'      => $this->filename,
-            'extension'     => $this->extension,
+            'version'   => $this->version,
+            'location'  => $this->location,
+            'filename'  => $this->filename,
+            'extension' => $this->extension,
         ];
 
         if (! $includeEmptyKeys) {
