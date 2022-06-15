@@ -71,7 +71,7 @@ Implement your feature or bug fix.
 Follow the following PHP coding standards, described in [PSR-0](http://www.php-fig.org/psr/psr-0/), [PSR-1](http://www.php-fig.org/psr/psr-1/), [PSR-2](http://www.php-fig.org/psr/psr-2/) and [PSR-4](http://www.php-fig.org/psr/psr-4/) documentation.
 The code should support:
 
-  - PHP >= 5.6
+  - PHP >= 8.0
 
 Make sure that `phpunit` completes without errors.
 
