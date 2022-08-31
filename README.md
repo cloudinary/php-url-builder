@@ -14,7 +14,7 @@ Effortlessly optimize and transform cloud's assets.
 #### Note
 
 This Readme provides basic installation and usage information. For the complete documentation, see
-the [PHP SDK Guide](https://cloudinary.com/documentation/php_integration).
+the [URL Builder SDK Guide](https://cloudinary.com/documentation/media_editing_api_sdks#installing_url_builder_sdks).
 
 ## Table of Contents
 
@@ -56,7 +56,7 @@ $cloudinary = new Cloudinary();
 
 ### Transform and Optimize Assets
 
-- [See full documentation](https://cloudinary.com/documentation/php_image_manipulation).
+- [See full documentation](https://cloudinary.com/documentation/media_editing_api_sdks#url_builder_sdk_methods).
 
 ```php
 $cloudinary->image('sample.jpg')->resize(Resize::fill()->width(100)->height(150))->format(Format::auto());
